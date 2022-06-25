@@ -319,7 +319,7 @@ char		**ft_split(char const *s, char c);
  * @return char* Returns the string representing the integer.
  * NULL if the allocation fails.
  */
-char		*ft_itoa(int n);
+char		*ft_itoa(long int n);
 
 /**
  * @brief Applies the function ’f’ to each character of the string ’s’
