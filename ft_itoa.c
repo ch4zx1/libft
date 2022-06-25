@@ -6,63 +6,66 @@
 /*   By: cfischer <cfischer@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/19 17:30:05 by cfischer          #+#    #+#             */
-/*   Updated: 2021/09/19 19:23:29 by cfischer         ###   ########.fr       */
+/*   Updated: 2022/06/23 02:15:48 by cfischer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static char	*convert(char *str, size_t size, unsigned int num,
-unsigned int isnegative)
+static int	ft_len(long int n)
 {
-	str[size] = '\0';
-	while (size--)
+	int	cont;
+
+	cont = 0;
+	if (n <= 0)
 	{
-		str[size] = (num % 10) + 48;
-		num /= 10;
+		if (n == -2147483648)
+			n++;
+		cont++;
+		n = n * -1;
 	}
-	if (isnegative)
+	while (n)
 	{
-		str[0] = '-';
+		n = n / 10;
+		cont++;
 	}
-	return (str);
+	return (cont);
 }
 
-size_t	ft_count(int num)
+static int	negative(char *s, int n)
 {
-	size_t	len;
-
-	len = 1;
-	if (num < 0)
-	{
-		len++;
-	}
-	num /= 10;
-	while (num)
-	{
-		num /= 10;
-		len++;
-	}
-	return (len);
+	if (n == -2147483648)
+		n++;
+	s[0] = '-';
+	n = n * -1;
+	return (n);
 }
 
-char	*ft_itoa(int n)
+char	*ft_itoa(long int n)
 {
-	size_t			count;
-	unsigned int	isnegative;
-	char			*str;
+	int		size;
+	int		min;
+	char	*str;
+	int		isneg;
 
-	count = ft_count(n);
-	isnegative = 0;
+	size = ft_len(n);
+	min = 0;
+	str = (char *)malloc(size + 1);
+	if (n == -2147483648)
+		min++;
+	isneg = 0;
 	if (n < 0)
 	{
-		isnegative = 1;
-		n = -n;
+		n = negative(str, n);
+		isneg++;
 	}
-	str = malloc(sizeof(char) * (count + 1));
-	if (str == NULL)
+	str[size] = 0;
+	while (size - isneg)
 	{
-		return (NULL);
+		str[size - 1] = (n % 10) + min + '0';
+		min = 0;
+		n = n / 10;
+		size --;
 	}
-	return (convert(str, count, (unsigned int)n, isnegative));
+	return (str);
 }
